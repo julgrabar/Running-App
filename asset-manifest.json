@@ -1,0 +1,17 @@
+{
+  "files": {
+    "main.js": "/Running-App/static/js/main.def29748.js",
+    "static/js/845.c5e8b6a7.chunk.js": "/Running-App/static/js/845.c5e8b6a7.chunk.js",
+    "static/media/finished.svg": "/Running-App/static/media/finished.64f5cbd0b786fccef8fdd47a0976c54f.svg",
+    "static/media/sound.mp3": "/Running-App/static/media/sound.fa3551f6fab3f9997888.mp3",
+    "index.html": "/Running-App/index.html",
+    "static/media/play.svg": "/Running-App/static/media/play.6793b61117f1d66d088536f2c3013b54.svg",
+    "static/media/arrow.svg": "/Running-App/static/media/arrow.fac84fd1ffc1ce3f8c08a74f63f1886b.svg",
+    "static/media/pause.svg": "/Running-App/static/media/pause.1071008aaf34ff48cdc52b9f26506338.svg",
+    "main.def29748.js.map": "/Running-App/static/js/main.def29748.js.map",
+    "845.c5e8b6a7.chunk.js.map": "/Running-App/static/js/845.c5e8b6a7.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/js/main.def29748.js"
+  ]
+}
