@@ -5,6 +5,8 @@ import { Layout } from './Layout';
 import { WeekTrainingsPage } from 'pages/TrainingsPage';
 import { WorkoutPage } from 'pages/WorkoutPage';
 import { HomePage } from 'pages/HomePage';
+import { LoginPage } from 'pages/LoginPage';
+import { SignupPage } from 'pages/SignupPage';
 
 function App() {
   return (
@@ -18,6 +20,8 @@ function App() {
             <Route path=":workoutId" element={<WorkoutPage/>}/>
           </Route>
         </Route>
+        <Route path="login" element={<LoginPage/>}/>
+        <Route path="signup" element={<SignupPage/>}/>
       </Route>  
     </Routes>
   );

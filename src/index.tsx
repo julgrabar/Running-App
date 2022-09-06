@@ -10,7 +10,8 @@ const queryClient = new QueryClient();
 const theme = {
   colors: {
     mainFontColor: "#ffffff",
-    secondaryFontColor: "#1D1617"
+    secondaryFontColor: "#1D1617",
+    gradient: "linear-gradient(274.42deg, #92A3FD 0%, #9DCEFF 124.45%)"
   }
 }
 const root = ReactDOM.createRoot(

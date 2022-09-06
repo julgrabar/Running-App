@@ -44,4 +44,8 @@ img{
   display: inline-block;
   max-width: 100%;
 }
+
+button{
+  outline: none;
+}
 `
