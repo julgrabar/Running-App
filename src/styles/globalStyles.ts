@@ -1,4 +1,4 @@
-import { createGlobalStyle } from "styled-components";
+import { createGlobalStyle } from 'styled-components';
 
 export const Global = createGlobalStyle`
 body{
@@ -18,7 +18,7 @@ min-height: 100vh;
 }
 
 #root{
-  min-height: 100vh;
+  min-height: 100hv;
 }
 
 ul {
@@ -48,4 +48,4 @@ img{
 button{
   outline: none;
 }
-`
+`;

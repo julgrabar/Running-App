@@ -42,3 +42,15 @@ export interface IWarming {
     exercise_type: IExerciseType
     duration: number
 }
+
+export interface ISignupCridentials {
+    username: string
+    password: string
+    password2: string
+    email: string
+}
+
+export interface ILoginCridentials {
+    username: string
+    password: string
+}
