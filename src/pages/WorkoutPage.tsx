@@ -1,15 +1,14 @@
-import { Timer } from 'components/Timer/Timer';
-import { Heading } from 'components/Trainings/Trainings.styled';
-import { makeWorkout } from 'helpers/workoutMaker';
+import styled from 'styled-components';
 import { useState } from 'react';
 import { useQuery } from 'react-query';
 import { useNavigate, useParams } from 'react-router-dom';
+import { Timer } from 'components/Timer/Timer';
+import { Heading } from 'components/Trainings/Trainings.styled';
+import { makeWorkout } from 'helpers/workoutMaker';
 import { fetchWorkout, finishWorkoutRequest } from 'services/api-service';
-import styled from 'styled-components';
 import playImg from 'images/play.svg';
 import finishedImg from 'images/finished.svg';
 import { Button } from 'styles/Button.styled';
-import { CenteredWrapper, CenteringWrapper } from 'styles/CenteredWrapper';
 import { IExercise, ITraining, IWarming } from 'types/types';
 import { useAppSelector } from 'redux/typedHooks';
 import { getIsLoggedIn } from 'redux/auth/authSelectors';
@@ -53,100 +52,99 @@ const WorkoutPage = () => {
   };
 
   return (
-    <CenteringWrapper>
-      <WorkoutWrapper>
-        {isLoading && <Loader absolute />}
+    <WorkoutWrapper>
+      {isLoading && <Loader absolute />}
 
-        {isError && <p>Something went wrong...</p>}
+      {isError && <p>Something went wrong...</p>}
 
-        {isSuccess && data && (
-          <>
-            {status === Status.IDLE && (
-              <>
-                <Heading dark>{data.title}</Heading>
+      {isSuccess && data && (
+        <>
+          {status === Status.IDLE && (
+            <>
+              <Heading dark>{data.title}</Heading>
+              <Button
+                type="button"
+                onClick={() => setStatus(Status.INPROGRESS)}
+                round={{ diameter: 160 }}
+                primary
+              >
+                <img src={playImg} alt="Play" />
+              </Button>
+            </>
+          )}
+
+          {status === Status.INPROGRESS && workout.length > 0 && (
+            <>
+              <Heading dark>
+                {workout[currentExersice].exercise_type.title}
+              </Heading>
+
+              <img
+                className="exercise-img"
+                src={workout[currentExersice].exercise_type.image}
+                alt={workout[currentExersice].exercise_type.title}
+              />
+
+              <Timer
+                exersice={workout[currentExersice]}
+                onTimerFinished={onTimerFinished}
+              />
+
+              <Controls>
                 <Button
-                  type="button"
-                  onClick={() => setStatus(Status.INPROGRESS)}
-                  round={{ diameter: 160 }}
                   primary
+                  onClick={
+                    currentExersice === 0
+                      ? () => navigate(`/trainings/${weekId}`)
+                      : () => setCurrentExersice(prev => prev - 1)
+                  }
                 >
-                  <img src={playImg} alt="Play" />
+                  {currentExersice === 0 ? 'Go back' : 'Previous'}
                 </Button>
-              </>
-            )}
 
-            {status === Status.INPROGRESS && workout.length > 0 && (
-              <>
-                <Heading dark>
-                  {workout[currentExersice].exercise_type.title}
-                </Heading>
-
-                <img
-                  className="exercise-img"
-                  src={workout[currentExersice].exercise_type.image}
-                  alt={workout[currentExersice].exercise_type.title}
-                />
-
-                <Timer
-                  exersice={workout[currentExersice]}
-                  onTimerFinished={onTimerFinished}
-                />
-
-                <Controls>
-                  <Button
-                    primary
-                    onClick={
-                      currentExersice === 0
-                        ? () => navigate(`/trainings/${weekId}`)
-                        : () => setCurrentExersice(prev => prev - 1)
-                    }
-                  >
-                    {currentExersice === 0 ? 'Go back' : 'Previous'}
-                  </Button>
-
-                  <Button
-                    primary
-                    onClick={
-                      workout.length === currentExersice + 1
-                        ? finishWorkout
-                        : () => setCurrentExersice(prev => prev + 1)
-                    }
-                  >
-                    {workout.length === currentExersice + 1
-                      ? 'Finish workout'
-                      : 'Next'}
-                  </Button>
-                </Controls>
-              </>
-            )}
-
-            {status === Status.FINISHED && (
-              <>
-                <Heading dark>Well done! Workout is finished.</Heading>
-                <img src={finishedImg} alt="Workout is finished" />
                 <Button
-                  type="button"
                   primary
-                  onClick={() => navigate('/trainings')}
-                  style={{ marginTop: '20px' }}
+                  onClick={
+                    workout.length === currentExersice + 1
+                      ? finishWorkout
+                      : () => setCurrentExersice(prev => prev + 1)
+                  }
                 >
-                  Go back
+                  {workout.length === currentExersice + 1
+                    ? 'Finish workout'
+                    : 'Next'}
                 </Button>
-              </>
-            )}
-          </>
-        )}
-      </WorkoutWrapper>
-    </CenteringWrapper>
+              </Controls>
+            </>
+          )}
+
+          {status === Status.FINISHED && (
+            <>
+              <Heading dark>Well done! Workout is finished.</Heading>
+              <img src={finishedImg} alt="Workout is finished" />
+              <Button
+                type="button"
+                primary
+                onClick={() => navigate('/trainings')}
+                style={{ marginTop: '20px' }}
+              >
+                Go back
+              </Button>
+            </>
+          )}
+        </>
+      )}
+    </WorkoutWrapper>
   );
 };
 
 export default WorkoutPage;
 
-const WorkoutWrapper = styled(CenteredWrapper)`
+const WorkoutWrapper = styled.div`
   text-align: center;
   width: 100%;
   max-width: 360px;
+  margin: auto;
   span {
     display: block;
   }

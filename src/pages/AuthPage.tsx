@@ -1,7 +1,7 @@
-import { SignupForm } from 'components/Forms/SignupForm';
-import { Heading } from 'components/Trainings/Trainings.styled';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
+import { SignupForm } from 'components/Forms/SignupForm';
+import { Heading } from 'components/Trainings/Trainings.styled';
 import authImg from 'images/auth.svg';
 import { LoginForm } from 'components/Forms/LoginForm';
 
@@ -42,10 +42,9 @@ const AuthPage = ({ signup, login }: IProps) => {
 export default AuthPage;
 
 const AuthPageWrapper = styled.div`
-  height: 1px;
+  width: 100%;
   min-height: 100%;
   margin: 0 auto;
-  padding-bottom: 30px;
 
   img {
     display: none;
@@ -55,7 +54,6 @@ const AuthPageWrapper = styled.div`
     display: flex;
     flex-direction: row;
     align-items: center;
-    height: auto;
 
     img {
       display: inline-block;

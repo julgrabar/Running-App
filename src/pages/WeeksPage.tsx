@@ -19,7 +19,7 @@ const WeeksPage: FC = () => {
 
   const navigate = useNavigate();
   return (
-    <div style={{ paddingBottom: 30 }}>
+    <>
       {isError && <p>Something went wrong...</p>}
 
       {isLoading && <Loader absolute />}
@@ -37,7 +37,7 @@ const WeeksPage: FC = () => {
           ))}
         </List>
       )}
-    </div>
+    </>
   );
 };
 

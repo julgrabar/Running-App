@@ -1,6 +1,6 @@
 import styled from 'styled-components';
-import homePageImg from 'images/homepage.svg';
 import { Link } from 'react-router-dom';
+import homePageImg from 'images/homepage.svg';
 import { Heading } from 'components/Trainings/Trainings.styled';
 import { useAppSelector } from 'redux/typedHooks';
 import { getUser } from 'redux/auth/authSelectors';
@@ -11,7 +11,7 @@ const HomePage = () => {
 
   return (
     <HomePageWrapper>
-      <img src={homePageImg} alt="Register, log in or do a workout" />
+      <img src={homePageImg} alt="Register, login or do a workout" />
       <UserNav>
         <Heading dark>{`Welcome${isLoggedIn ? ', ' + username : ''}!`}</Heading>
         {!isLoggedIn && (
@@ -36,7 +36,6 @@ const HomePageWrapper = styled.div`
   margin: auto;
   display: flex;
   flex-direction: column;
-  padding-bottom: 30px;
 
   img {
     display: block;
@@ -45,6 +44,7 @@ const HomePageWrapper = styled.div`
 
   @media screen and (min-width: 768px) {
     max-width: none;
+    width: 100%;
     flex-direction: row;
     align-items: center;
     img {
