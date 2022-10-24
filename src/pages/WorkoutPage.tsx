@@ -115,6 +115,10 @@ const WorkoutPage = () => {
                     : 'Next'}
                 </Button>
               </Controls>
+              <progress
+                max={workout.length}
+                value={currentExersice + 1}
+              ></progress>
             </>
           )}
 
@@ -151,6 +155,10 @@ const WorkoutWrapper = styled.div`
 
   img.exercise-img {
     max-height: 225px;
+  }
+
+  progress {
+    width: 100%;
   }
 `;
 
