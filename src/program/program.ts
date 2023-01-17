@@ -604,7 +604,7 @@ export const defWeeks: IWeek[] = [
     is_passed: false,
     order: 5,
     title: 'Week 5',
-    image: week6Image,
+    image: week5Image,
     trainings: [
       {
         id: 13,
@@ -711,7 +711,7 @@ export const defWeeks: IWeek[] = [
     is_passed: false,
     order: 6,
     title: 'Week 6',
-    image: week7Image,
+    image: week6Image,
     trainings: [
       {
         id: 16,
