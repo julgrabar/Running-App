@@ -1,4 +1,5 @@
 import axios from 'axios';
+axios.defaults.baseURL = '/Running-App/api';
 
 export const fetchWeeks = async () => {
   const response = await axios.get('/weeks/');

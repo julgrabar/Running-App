@@ -1,10 +1,11 @@
 import { warming } from 'warming';
-import { IExercise, ITraining, IWarming } from 'types/types';
+import { ITraining, IWorkout } from 'types/types';
 
-export function makeWorkout({
-  exercises,
-  repetitions_number,
-}: ITraining): (IWarming | IExercise)[] {
+export function makeWorkout(training: ITraining | undefined): IWorkout | null {
+  if (!training) {
+    return null;
+  }
+  let { exercises, repetitions_number } = training;
   let workout = [];
   workout.push(warming);
 
@@ -12,5 +13,5 @@ export function makeWorkout({
     workout = [...workout, ...exercises];
   }
   workout.push(warming);
-  return workout;
+  return { title: training.title, workout };
 }

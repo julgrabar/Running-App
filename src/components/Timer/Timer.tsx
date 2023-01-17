@@ -1,11 +1,11 @@
 import { useEffect, useRef, useState } from 'react';
-import { Button } from 'styles/Button.styled';
 import { IExercise, IWarming } from 'types/types';
 import useSound from 'use-sound';
 import stopImg from 'images/pause.svg';
 import startImg from 'images/play.svg';
 import { TimerWrapper } from './Timer.styled';
 import { setWorkerInterval, clearWorkerTimer } from 'set-worker-timer';
+import { Button } from 'components/Button/Button';
 const sound = require('sounds/sound.mp3');
 
 export const Timer = ({
@@ -61,16 +61,17 @@ export const Timer = ({
         {(seconds % 60).toString().padStart(2, '0')}
       </span>
       <Button
+        title={
+          isActive ? (
+            <img src={stopImg} alt="Stop" />
+          ) : (
+            <img src={startImg} alt="Start" />
+          )
+        }
         onClick={isActive ? stopTimer : startTimer}
         primary
         round={{ diameter: 50 }}
-      >
-        {isActive ? (
-          <img src={stopImg} alt="Stop" />
-        ) : (
-          <img src={startImg} alt="Start" />
-        )}
-      </Button>
+      />
     </TimerWrapper>
   );
 };

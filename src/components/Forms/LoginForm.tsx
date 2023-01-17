@@ -1,5 +1,4 @@
 import { useForm } from 'react-hook-form';
-import { Button } from 'styles/Button.styled';
 import { ILoginCridentials } from 'types/types';
 import { Form } from './Form.styled';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -8,6 +7,7 @@ import { useAppDispatch, useAppSelector } from 'redux/typedHooks';
 import { login } from 'redux/auth/authOperations';
 import { getIsAuthLoading } from 'redux/auth/authSelectors';
 import { Loader } from 'styles/Loader.styled';
+import { Button } from 'components/Button/Button';
 
 export const LoginForm = () => {
   const dispatch = useAppDispatch();
@@ -40,9 +40,7 @@ export const LoginForm = () => {
       {isLoading ? (
         <Loader />
       ) : (
-        <Button primary type="submit">
-          Sign up
-        </Button>
+        <Button primary title="Sign in" type="submit" />
       )}
     </Form>
   );

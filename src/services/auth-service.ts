@@ -4,30 +4,33 @@ import { ISignupCridentials, ILoginCridentials } from 'types/types';
 import { store } from 'redux/store';
 import { logout } from 'redux/auth/authSlice';
 import { storage } from 'helpers/localStorage';
-
-axios.defaults.baseURL = 'https://running-app-api.herokuapp.com/api';
+let authInstance = axios.create({
+  baseURL: 'https://running-app-api.herokuapp.com/api',
+});
 
 export const signupRequest = async (credentials: ISignupCridentials) => {
-  const { data } = await axios.post('/users/signup/', credentials);
+  const { data } = await authInstance.post('/users/signup/', credentials);
   return data;
 };
 
 export const loginRequest = async (credentials: ILoginCridentials) => {
-  const { data } = await axios.post('/users/token/', credentials);
+  const { data } = await authInstance.post('/users/token/', credentials);
   return { ...data, username: credentials.username };
 };
 
 export const refreshRequest = async (refresh: string) => {
-  const { data } = await axios.post('/users/token/refresh/', { refresh });
+  const { data } = await authInstance.post('/users/token/refresh/', {
+    refresh,
+  });
   return data.access;
 };
 
 export const currentUserRequest = async () => {
-  const { data } = await axios.get('/users/me/');
+  const { data } = await authInstance.get('/users/me/');
   return data;
 };
 
-axios.interceptors.request.use(
+authInstance.interceptors.request.use(
   config => {
     const token = store.getState().auth.user.access;
     if (token) {
@@ -40,7 +43,7 @@ axios.interceptors.request.use(
   }
 );
 
-axios.interceptors.response.use(
+authInstance.interceptors.response.use(
   res => {
     return res;
   },
@@ -70,7 +73,7 @@ axios.interceptors.response.use(
         if (refreshToken !== null) {
           await dispatch(refresh(refreshToken));
         }
-        return axios.request(originalConfig);
+        return authInstance.request(originalConfig);
       } catch (error) {
         return Promise.reject(error);
       }

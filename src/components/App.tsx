@@ -1,6 +1,6 @@
 import { Route, Routes } from 'react-router-dom';
 import { Layout } from './Layout';
-import { PublicRoute } from './ProtectedRoutes/PublicRoute';
+import { PublicRoute } from './CustomRoutes/PublicRoute';
 import { lazy } from 'react';
 import NotFoundPage from 'pages/NotFoundPage';
 

@@ -1,7 +1,5 @@
 import { useQuery } from 'react-query';
-import { useNavigate } from 'react-router-dom';
 import { fetchWeeks } from 'services/api-service';
-import { Button } from 'styles/Button.styled';
 import {
   List,
   WeekItem,
@@ -10,29 +8,27 @@ import {
 import { FC } from 'react';
 import { IWeek } from 'types/types';
 import { Loader } from 'styles/Loader.styled';
+import { defWeeks } from 'program/program';
+import { GoToBtn } from 'components/Button/Button';
 
 const WeeksPage: FC = () => {
-  const { data, isError, isLoading, isSuccess } = useQuery<IWeek[], Error>(
-    'weeks',
-    fetchWeeks
-  );
+  const { data, isLoading } = useQuery<IWeek[], Error>('weeks', fetchWeeks);
+  let weeksList = data || defWeeks;
 
-  const navigate = useNavigate();
   return (
     <>
-      {isError && <p>Something went wrong...</p>}
-
       {isLoading && <Loader absolute />}
 
-      {isSuccess && data && (
+      {!isLoading && weeksList && (
         <List adaptive>
-          {data.map(({ title, image, id }) => (
+          {weeksList.map(({ title, image, id }) => (
             <WeekItem key={id}>
               <Heading>{title}</Heading>
               <img src={image} alt="running person" />
-              <Button onClick={() => navigate(`/trainings/${id}/`)}>
-                <span>Start run</span>
-              </Button>
+              <GoToBtn
+                title={<span>Start run</span>}
+                path={`/trainings/${id}/`}
+              />
             </WeekItem>
           ))}
         </List>

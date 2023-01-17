@@ -1,18 +1,19 @@
 import styled from 'styled-components';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useQuery } from 'react-query';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { Timer } from 'components/Timer/Timer';
 import { Heading } from 'components/Trainings/Trainings.styled';
 import { makeWorkout } from 'helpers/workoutMaker';
 import { fetchWorkout, finishWorkoutRequest } from 'services/api-service';
 import playImg from 'images/play.svg';
 import finishedImg from 'images/finished.svg';
-import { Button } from 'styles/Button.styled';
-import { IExercise, ITraining, IWarming } from 'types/types';
+import { ITraining } from 'types/types';
 import { useAppSelector } from 'redux/typedHooks';
 import { getIsLoggedIn } from 'redux/auth/authSelectors';
 import { Loader } from 'styles/Loader.styled';
+import { defWeeks } from 'program/program';
+import { Button, GoToBtn } from 'components/Button/Button';
 
 const Status = {
   IDLE: 'idle',
@@ -25,16 +26,18 @@ const WorkoutPage = () => {
   const [status, setStatus] = useState(Status.IDLE);
   const [currentExersice, setCurrentExersice] = useState(0);
   const { workoutId, weekId } = useParams();
-  const navigate = useNavigate();
-  let workout: (IWarming | IExercise)[] = [];
-  const { data, isLoading, isSuccess, isError } = useQuery<ITraining, Error>(
+  const { data, isLoading } = useQuery<ITraining, Error>(
     ['workout', workoutId],
     () => fetchWorkout(workoutId)
   );
 
-  if (data && workout.length === 0) {
-    workout = makeWorkout(data);
-  }
+  let workout = useMemo(() => {
+    let defProgram = defWeeks
+      .reduce((acc: ITraining[], el) => [...acc, ...el.trainings], [])
+      .find(el => el.id === Number(workoutId));
+
+    return makeWorkout(data || defProgram);
+  }, [workoutId, data]);
 
   const finishWorkout = () => {
     setStatus(Status.FINISHED);
@@ -44,7 +47,7 @@ const WorkoutPage = () => {
   };
 
   const onTimerFinished = () => {
-    if (currentExersice === workout.length - 1) {
+    if (workout && currentExersice === workout.workout.length - 1) {
       finishWorkout();
       return;
     }
@@ -55,68 +58,80 @@ const WorkoutPage = () => {
     <WorkoutWrapper>
       {isLoading && <Loader absolute />}
 
-      {isError && <p>Something went wrong...</p>}
+      {!isLoading && !workout && (
+        <>
+          <p>This workout doesn't exist...</p>
+          <GoToBtn
+            title="To program"
+            primary
+            path="/trainings"
+            marginTop="20px"
+          />
+        </>
+      )}
 
-      {isSuccess && data && (
+      {!isLoading && workout && (
         <>
           {status === Status.IDLE && (
             <>
-              <Heading dark>{data.title}</Heading>
+              <Heading dark>{workout.title}</Heading>
               <Button
-                type="button"
+                title={<img src={playImg} alt="Play" />}
                 onClick={() => setStatus(Status.INPROGRESS)}
                 round={{ diameter: 160 }}
                 primary
-              >
-                <img src={playImg} alt="Play" />
-              </Button>
+              />
             </>
           )}
 
-          {status === Status.INPROGRESS && workout.length > 0 && (
+          {status === Status.INPROGRESS && workout.workout.length > 0 && (
             <>
               <Heading dark>
-                {workout[currentExersice].exercise_type.title}
+                {workout.workout[currentExersice].exercise_type.title}
               </Heading>
 
               <img
                 className="exercise-img"
-                src={workout[currentExersice].exercise_type.image}
-                alt={workout[currentExersice].exercise_type.title}
+                src={workout.workout[currentExersice].exercise_type.image}
+                alt={workout.workout[currentExersice].exercise_type.title}
               />
 
               <Timer
-                exersice={workout[currentExersice]}
+                exersice={workout.workout[currentExersice]}
                 onTimerFinished={onTimerFinished}
               />
 
               <Controls>
-                <Button
-                  primary
-                  onClick={
-                    currentExersice === 0
-                      ? () => navigate(`/trainings/${weekId}`)
-                      : () => setCurrentExersice(prev => prev - 1)
-                  }
-                >
-                  {currentExersice === 0 ? 'Go back' : 'Previous'}
-                </Button>
+                {currentExersice === 0 ? (
+                  <GoToBtn
+                    primary
+                    title="Go back"
+                    path={`/trainings/${weekId}`}
+                  />
+                ) : (
+                  <Button
+                    primary
+                    title="Previous"
+                    onClick={() => setCurrentExersice(prev => prev - 1)}
+                  />
+                )}
 
                 <Button
                   primary
                   onClick={
-                    workout.length === currentExersice + 1
+                    workout.workout.length === currentExersice + 1
                       ? finishWorkout
                       : () => setCurrentExersice(prev => prev + 1)
                   }
-                >
-                  {workout.length === currentExersice + 1
-                    ? 'Finish workout'
-                    : 'Next'}
-                </Button>
+                  title={
+                    workout.workout.length === currentExersice + 1
+                      ? 'Finish workout'
+                      : 'Next'
+                  }
+                />
               </Controls>
               <progress
-                max={workout.length}
+                max={workout.workout.length}
                 value={currentExersice + 1}
               ></progress>
             </>
@@ -126,14 +141,12 @@ const WorkoutPage = () => {
             <>
               <Heading dark>Well done! Workout is finished.</Heading>
               <img src={finishedImg} alt="Workout is finished" />
-              <Button
-                type="button"
+              <GoToBtn
+                title="To program"
                 primary
-                onClick={() => navigate('/trainings')}
-                style={{ marginTop: '20px' }}
-              >
-                Go back
-              </Button>
+                path="/trainings"
+                marginTop="20px"
+              />
             </>
           )}
         </>
